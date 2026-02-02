@@ -18,10 +18,11 @@ seat_util_target_pct = 95   # %
 habit_current_pct = 52  # Current % at 3+ visits/week
 habit_target_pct = 70
 
-# 3. Support & Trust: Resolution Velocity (% resolved within SLA over time)
-resolution_weeks = ["Week -4", "Week -3", "Week -2", "Week -1", "Current"]
-resolution_pct = [58, 62, 65, 70, 72]  # % within SLA trend
+# 3. Support & Trust: Resolution Velocity + Ticket Volume
+resolution_weeks = ["3mo ago", "2mo ago", "1mo ago", "Current", "+1mo", "+2mo", "+3mo"]
+resolution_pct = [58, 62, 65, 72, 78, 85, 90]  # % within SLA (improving)
 resolution_target_pct = 90
+ticket_volume = [195, 168, 145, 120, 95, 75, 60]  # Going down: was high, target lower
 
 # 4. Adoption by Team: AI adoption % by team
 teams = ["Strategy", "Insights", "Creative", "Media", "Brand"]
@@ -34,24 +35,25 @@ fig = make_subplots(
     specs=[
         [{"type": "xy", "colspan": 2}, None],  # Row 0: header (logo goes here)
         [{"type": "indicator"}, {"type": "indicator"}],
-        [{"type": "xy"}, {"type": "xy"}],
+        [{"type": "xy", "secondary_y": True}, {"type": "xy"}],
     ],
     subplot_titles=(
         "",
-        "Adoption: Seat Utilization",
-        "Retention: 3+ Visits/Week Habit",
-        "Support & Trust: Resolution Velocity",
-        "Adoption by BrandCo Team",
+        "Adoption: Seat Utilisation",
+        "Workflow Integration: 3+ Weekly Visits/User",
+        "Support Tickets: Resolution Velocity & Volume",
+        "Adoption by BrandCo Teams",
     ),
     vertical_spacing=0.28,
     horizontal_spacing=0.12,
     row_heights=[0.14, 0.43, 0.43],  # Row 0: 14% for logo header
 )
 
-# --- OKR 1: Adoption - Seat Utilization 65% → 95% ---
+# --- OKR 1: Adoption - Seat Utilisation 65% → 95% ---
 fig.add_trace(go.Indicator(
     mode="gauge+number+delta",
     value=seat_util_current_pct,
+    number={"suffix": "%"},
     delta={"reference": seat_util_target_pct, "position": "top", "relative": False},
     gauge={
         "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": BRAND_GRAY, "ticksuffix": "%"},
@@ -76,6 +78,7 @@ fig.add_trace(go.Indicator(
 fig.add_trace(go.Indicator(
     mode="gauge+number+delta",
     value=habit_current_pct,
+    number={"suffix": "%"},
     delta={"reference": habit_target_pct, "position": "top", "relative": False},
     gauge={
         "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": BRAND_GRAY, "ticksuffix": "%"},
@@ -96,7 +99,7 @@ fig.add_trace(go.Indicator(
     title={"text": "Case Study Usage Target", "font": {"size": 11}},
 ), row=2, col=2)
 
-# --- OKR 3: Support & Trust - Resolution Velocity (trend over time) ---
+# --- OKR 3: Support & Trust - Resolution Velocity + Ticket Volume ---
 fig.add_trace(
     go.Scatter(
         x=resolution_weeks,
@@ -105,7 +108,7 @@ fig.add_trace(
         line=dict(color=BRAND_GOLD, width=4),
         marker=dict(size=10),
         name="% Within SLA",
-        showlegend=False,
+        showlegend=True,
     ),
     row=3, col=1,
 )
@@ -120,8 +123,22 @@ fig.add_trace(
     ),
     row=3, col=1,
 )
+fig.add_trace(
+    go.Scatter(
+        x=resolution_weeks,
+        y=ticket_volume,
+        mode="lines+markers",
+        line=dict(color=BRAND_WHITE, width=3, dash="dash"),
+        marker=dict(size=8),
+        name="Ticket Volume",
+        showlegend=True,
+    ),
+    row=3, col=1,
+    secondary_y=True,
+)
 fig.update_xaxes(title_text="", row=3, col=1)
 fig.update_yaxes(title_text="% Within SLA", range=[0, 100], row=3, col=1)
+fig.update_yaxes(title_text="Ticket Volume", range=[0, 250], row=3, col=1, secondary_y=True)
 
 # --- OKR 4: Adoption by Team ---
 fig.add_trace(go.Bar(name="Current", x=teams, y=current_adoption, marker_color=BRAND_WHITE), row=3, col=2)
@@ -186,7 +203,7 @@ for ann in fig.layout.annotations:
 
 # Add title below logo (after loop so font size 28 is not overwritten)
 fig.add_annotation(
-    text="BrandCo Strategic Health Reset: Path to 95% Utilization",
+    text="BrandCo Strategic Health Reset: Path to 95% Utilisation",
     xref="paper", yref="paper",
     x=0.5, y=0.85,
     xanchor="center", yanchor="top",
