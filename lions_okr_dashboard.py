@@ -8,6 +8,9 @@ BRAND_DARK = "#0a0a0a"
 BRAND_GOLD = "#D4A84B"
 BRAND_WHITE = "#ffffff"
 BRAND_GRAY = "#6b7280"
+# Live tracker accent colors
+LIVE_GREEN = "#00ff88"
+LIVE_CYAN = "#00d4ff"
 
 # OKR Data
 # 1. Adoption: Seat utilization 65% → 95% via Activation Sprint
@@ -15,7 +18,7 @@ seat_util_current_pct = 65  # %
 seat_util_target_pct = 95   # %
 
 # 2. Retention/Habit: 3+ visits/week for 70% of assigned users
-habit_current_pct = 52  # Current % at 3+ visits/week
+habit_current_pct = 28  # Current % at 3+ visits/week
 habit_target_pct = 70
 
 # 3. Support & Trust: Resolution Velocity + Ticket Volume
@@ -24,9 +27,14 @@ resolution_pct = [58, 62, 65, 72, 78, 85, 90]  # % within SLA (improving)
 resolution_target_pct = 90
 ticket_volume = [195, 168, 145, 120, 95, 75, 60]  # Going down: was high, target lower
 
+# Engagement: WAU / DAU (per seat, max = total_seats)
+total_seats = 867
+wau = 196    # Weekly Active Users (per seat)
+dau = 48    # Daily Active Users (per seat)
+
 # 4. Adoption by Team: AI adoption % by team
 teams = ["Strategy", "Insights", "Creative", "Media", "Brand"]
-current_adoption = [95, 88, 12, 8, 5]
+current_adoption = [80, 70, 12, 8, 5]
 target_adoption = [95, 90, 75, 75, 75]
 
 # Plotly Dashboard - Row 0: header for logo, Rows 1-2: 4 OKRs
@@ -40,9 +48,9 @@ fig = make_subplots(
     subplot_titles=(
         "",
         "Adoption: Seat Utilisation",
-        "Workflow Integration: 3+ Weekly Visits/User",
+        "Workflow Integration: 3+ Weekly Queries/User",
         "Support Tickets: Resolution Velocity & Volume",
-        "Adoption by BrandCo Teams",
+        "AI assistant: Usage by BrandCo Teams",
     ),
     vertical_spacing=0.28,
     horizontal_spacing=0.12,
@@ -96,7 +104,7 @@ fig.add_trace(go.Indicator(
             "value": habit_target_pct,
         },
     },
-    title={"text": "Case Study Usage Target", "font": {"size": 11}},
+    title={"text": "Time-to-Value Adoption Target", "font": {"size": 11}},
 ), row=2, col=2)
 
 # --- OKR 3: Support & Trust - Resolution Velocity + Ticket Volume ---
@@ -201,13 +209,55 @@ for ann in fig.layout.annotations:
         yref="paper",
     )
 
-# Add title below logo (after loop so font size 28 is not overwritten)
+# Add title below logo
 fig.add_annotation(
     text="BrandCo Strategic Health Reset: Path to 95% Utilisation",
     xref="paper", yref="paper",
-    x=0.5, y=0.85,
+    x=0.5, y=0.90,
     xanchor="center", yanchor="top",
     font=dict(size=28, color=BRAND_WHITE),
+    showarrow=False,
+)
+
+# Live tracker strip (narrow box, text-fit with margins)
+fig.add_shape(
+    type="rect",
+    xref="paper", yref="paper",
+    x0=0.40, y0=0.76, x1=0.60, y1=0.81,
+    line=dict(width=1, color="rgba(0,255,136,0.4)"),
+    layer="below",
+)
+# Live tracker: WAU / DAU (fitted within box)
+fig.add_annotation(
+    text="● LIVE",
+    xref="paper", yref="paper",
+    x=0.41, y=0.785,
+    xanchor="left", yanchor="middle",
+    font=dict(size=11, color=LIVE_GREEN, family="monospace"),
+    showarrow=False,
+)
+fig.add_annotation(
+    text=f"<b>DAU =</b> {dau:,}",
+    xref="paper", yref="paper",
+    x=0.475, y=0.785,
+    xanchor="center", yanchor="middle",
+    font=dict(size=15, color=BRAND_GOLD),
+    showarrow=False,
+)
+fig.add_annotation(
+    text="·",
+    xref="paper", yref="paper",
+    x=0.5, y=0.785,
+    xanchor="center", yanchor="middle",
+    font=dict(size=15, color=BRAND_GRAY),
+    showarrow=False,
+)
+fig.add_annotation(
+    text=f"<b>WAU =</b> {wau:,}",
+    xref="paper", yref="paper",
+    x=0.55, y=0.785,
+    xanchor="center", yanchor="middle",
+    font=dict(size=15, color=BRAND_GOLD),
     showarrow=False,
 )
 
