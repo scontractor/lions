@@ -25,7 +25,7 @@ resolution_target_pct = 90
 ticket_volume = [52, 44, 36, 28, 20, 14, 8]    # Weekly ticket volume: ~50 → target <10/week
 
 # 3b. Feature Adoption Rate (live): AI Assistant vs Search bar
-feature_ai_pct = 58                       # % of active users using AI Assistant
+feature_ai_pct = 28                       # % of active users using AI Assistant
 feature_search_pct = 100 - feature_ai_pct # % using only Search
 
 # 3c. Stickiness history (DAU / MAU) for line chart
@@ -41,7 +41,7 @@ mau = 260    # Monthly Active Users
 stickiness_pct = round(dau / mau * 100)  # DAU / MAU as %
 
 # 4. Adoption by Team: AI adoption % by team
-teams = ["Strategy", "Insights", "Creative", "Media", "Brand"]
+teams = ["Team A", "Team B", "Team C", "Team D", "Team E"]
 current_adoption = [80, 70, 12, 8, 5]
 target_adoption = [95, 90, 75, 75, 75]
 
@@ -59,7 +59,7 @@ fig = make_subplots(
         "Adoption: Seat Utilisation",
         "Workflow Integration: 3+ Weekly Queries/User",
         "Support Tickets: Resolution Velocity & Volume",
-        "AI assistant: Usage by BrandCo Teams",
+        "AI assistant: Penetration by BrandCo Teams",
         "Feature Adoption: AI Assistant vs Search bar",
         "Stickiness: DAU / MAU",
     ),
