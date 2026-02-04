@@ -25,7 +25,7 @@ habit_target_pct = 70
 resolution_weeks = ["3mo ago", "2mo ago", "1mo ago", "Current", "+1mo", "+2mo", "+3mo"]
 resolution_pct = [58, 62, 65, 72, 78, 85, 90]  # % within SLA (improving)
 resolution_target_pct = 90
-ticket_volume = [195, 168, 145, 120, 95, 75, 60]  # Going down: was high, target lower
+ticket_volume = [52, 44, 36, 28, 20, 14, 8]  # Weekly ticket volume: ~50 → target <10/week
 
 # Engagement: WAU / DAU (per seat, max = total_seats)
 total_seats = 867
@@ -138,7 +138,7 @@ fig.add_trace(
         mode="lines+markers",
         line=dict(color=BRAND_WHITE, width=3, dash="dash"),
         marker=dict(size=8),
-        name="Ticket Volume",
+        name="Weekly ticket volume",
         showlegend=True,
     ),
     row=3, col=1,
@@ -146,7 +146,7 @@ fig.add_trace(
 )
 fig.update_xaxes(title_text="", row=3, col=1)
 fig.update_yaxes(title_text="% Within SLA", range=[0, 100], row=3, col=1)
-fig.update_yaxes(title_text="Ticket Volume", range=[0, 250], row=3, col=1, secondary_y=True)
+fig.update_yaxes(title_text="Weekly ticket volume", range=[0, 60], row=3, col=1, secondary_y=True)
 
 # --- OKR 4: Adoption by Team ---
 fig.add_trace(go.Bar(name="Current", x=teams, y=current_adoption, marker_color=BRAND_WHITE), row=3, col=2)
